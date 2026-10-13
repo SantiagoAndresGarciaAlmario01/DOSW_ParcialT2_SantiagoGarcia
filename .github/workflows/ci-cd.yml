@@ -21,6 +21,8 @@ jobs:
 
   docker:
     needs: test
+    # Activate publication and deployment after the registry/Azure secrets exist.
+    if: ${{ vars.DEPLOY_ENABLED == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

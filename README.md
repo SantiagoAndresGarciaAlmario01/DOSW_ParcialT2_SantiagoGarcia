@@ -113,7 +113,7 @@ La imagen usa una etapa Maven para compilar y una imagen Java 21 JRE para ejecut
 
 `.github/workflows/ci-cd.yml` define tres etapas: verificación con Maven, publicación de la imagen en Docker Hub y despliegue a Azure App Service. Se activa con cambios en `main` o `develop`.
 
-Secrets requeridos en GitHub: `DOCKERHUB_USERNAME`, `DOCKERHUB_TOKEN`, `AZURE_CREDENTIALS`, `AZURE_WEBAPP_NAME` y `JWT_SECRET`. Configure además `MONGODB_URI` y `WEBSITES_PORT=8080` en Azure App Service.
+Secrets requeridos en GitHub: `DOCKERHUB_USERNAME`, `DOCKERHUB_TOKEN`, `AZURE_CREDENTIALS`, `AZURE_WEBAPP_NAME` y `JWT_SECRET`. El job de publicación/despliegue espera la variable de Actions `DEPLOY_ENABLED=true`; se mantiene apagado mientras faltan las credenciales. Configure además `MONGODB_URI`, `JWT_SECRET` y `WEBSITES_PORT=8080` en Azure App Service.
 
 **Estado del pipeline y despliegue:** pendientes de configurar las cuentas, secrets y recursos individuales.
 
