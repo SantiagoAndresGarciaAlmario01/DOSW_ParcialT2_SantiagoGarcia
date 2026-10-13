@@ -28,9 +28,13 @@ Servicio REST base para el Parcial Práctico del Segundo Tercio de DOSW. Usa Spr
 
 ## 3. Despliegue
 
-- **Servicio Azure:** Pendiente de crear y desplegar
-- **Health:** `https://<nombre-app>.azurewebsites.net/api/v1/health`
-- **Swagger:** `https://<nombre-app>.azurewebsites.net/swagger-ui/index.html`
+- **App Service:** `dosw-parcial-t2-santiago` (Canada Central, plan Linux B1)
+- **Grupo de recursos:** `rg-dosw-parcialt2-santiago`
+- **URL:** <https://dosw-parcial-t2-santiago-byajfdfxevcmh8at.canadacentral-01.azurewebsites.net>
+- **Costo estimado del plan:** 13.14 USD/mes; el consumo de créditos de Azure for Students depende del saldo disponible.
+- **Estado:** App Service creado. Aún sirve la imagen de muestra de Azure; el contenedor Spring Boot está pendiente de publicación en Docker Hub.
+- **Health (después del despliegue):** `https://dosw-parcial-t2-santiago-byajfdfxevcmh8at.canadacentral-01.azurewebsites.net/api/v1/health`
+- **Swagger (después del despliegue):** `https://dosw-parcial-t2-santiago-byajfdfxevcmh8at.canadacentral-01.azurewebsites.net/swagger-ui/index.html`
 
 ## 4. Estructura del proyecto
 
@@ -115,7 +119,7 @@ La imagen usa una etapa Maven para compilar y una imagen Java 21 JRE para ejecut
 
 Secrets requeridos en GitHub: `DOCKERHUB_USERNAME`, `DOCKERHUB_TOKEN`, `AZURE_CREDENTIALS`, `AZURE_WEBAPP_NAME` y `JWT_SECRET`. El job de publicación/despliegue espera la variable de Actions `DEPLOY_ENABLED=true`; se mantiene apagado mientras faltan las credenciales. Configure además `MONGODB_URI`, `JWT_SECRET` y `WEBSITES_PORT=8080` en Azure App Service.
 
-**Estado del pipeline y despliegue:** pendientes de configurar las cuentas, secrets y recursos individuales.
+**Estado del pipeline y despliegue:** el workflow está en el repositorio y la publicación/despliegue permanece desactivada hasta registrar los secrets de Docker Hub y Azure y la variable `DEPLOY_ENABLED=true`. El App Service ya existe; la imagen Spring Boot aún no está publicada.
 
 ## 11. Herramientas de modelado y diseño (evidencias)
 
