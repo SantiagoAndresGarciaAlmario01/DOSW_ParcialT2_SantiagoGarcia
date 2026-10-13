@@ -20,7 +20,6 @@
 
 - **Nombre completo:** Santiago Andres Garcia Almario
 - **Grupo:** 1
-- **Profesor agregado al repositorio:** Pendiente de confirmar
 
 ## 2. Descripción del proyecto
 
