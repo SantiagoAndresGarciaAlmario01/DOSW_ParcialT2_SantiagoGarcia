@@ -32,9 +32,13 @@ Servicio REST base para el Parcial Práctico del Segundo Tercio de DOSW. Usa Spr
 - **Grupo de recursos:** `rg-dosw-parcialt2-santiago`
 - **URL:** <https://dosw-parcial-t2-santiago-byajfdfxevcmh8at.canadacentral-01.azurewebsites.net>
 - **Costo estimado del plan:** 13.14 USD/mes; el consumo de créditos de Azure for Students depende del saldo disponible.
-- **Estado:** App Service creado. Aún sirve la imagen de muestra de Azure; el contenedor Spring Boot está pendiente de publicación en Docker Hub.
-- **Health (después del despliegue):** `https://dosw-parcial-t2-santiago-byajfdfxevcmh8at.canadacentral-01.azurewebsites.net/api/v1/health`
-- **Swagger (después del despliegue):** `https://dosw-parcial-t2-santiago-byajfdfxevcmh8at.canadacentral-01.azurewebsites.net/swagger-ui/index.html`
+- **Base de datos:** Azure DocumentDB (MongoDB compatible), `docdb-parcialt2-santiago`, Canada Central. La URI está configurada como variable de entorno y no debe publicarse.
+- **Estado:** despliegue completado desde GitHub Actions. Swagger carga y la operación de salud respondió HTTP 200 con `{"service":"DOSW-ParcialT2","status":"UP"}`.
+- **Health:** <https://dosw-parcial-t2-santiago-byajfdfxevcmh8at.canadacentral-01.azurewebsites.net/api/v1/health>
+- **Swagger:** <https://dosw-parcial-t2-santiago-byajfdfxevcmh8at.canadacentral-01.azurewebsites.net/swagger-ui/index.html>
+- **Ejecución CI/CD:** [workflow exitoso en GitHub Actions](https://github.com/SantiagoAndresGarciaAlmario01/DOSW_ParcialT2_SantiagoGarcia/actions/runs/38420076864) (jobs `test`, `docker` y `deploy` completados).
+
+![Evidencia del endpoint Health con HTTP 200](docs/images/evidencia-health.png)
 
 ## 4. Estructura del proyecto
 
@@ -100,7 +104,11 @@ El servicio escucha en `http://localhost:8080`. El endpoint público de salud es
 
 Ejecute `mvn test` para las pruebas unitarias y `mvn verify` para la verificación completa. JaCoCo genera su reporte en `target/site/jacoco/`.
 
-**Evidencia de ejecución y reporte JaCoCo:** pendiente de agregar después de ejecutar las pruebas.
+**Verificación:** `mvn verify` terminó con `BUILD SUCCESS`; Surefire reportó 1 prueba, 0 fallos y 0 errores. El reporte JaCoCo registra 13% de cobertura global y 100% en el controlador probado.
+
+![Evidencia de mvn verify](docs/images/evidencia-maven.png)
+
+![Resumen de cobertura JaCoCo](docs/images/evidencia-jacoco.png)
 
 ## 9. Docker
 
@@ -111,19 +119,26 @@ docker run --rm -p 8080:8080 -e JWT_SECRET='<secreto-base64>' -e MONGODB_URI='mo
 
 La imagen usa una etapa Maven para compilar y una imagen Java 21 JRE para ejecutar. `.dockerignore` excluye Git, documentación, archivos Markdown, `target/` y secretos.
 
-**Evidencia del contenedor en ejecución:** pendiente de agregar.
+**Publicación:** el job `docker` del [workflow exitoso](https://github.com/SantiagoAndresGarciaAlmario01/DOSW_ParcialT2_SantiagoGarcia/actions/runs/38420076864) finalizó correctamente. La ejecución local de `docker build`/`docker run` no se documenta como evidencia porque el daemon de Docker no respondió en este equipo durante la revisión. Falta una captura propia del contenedor local en ejecución, si el evaluador la exige.
 
 ## 10. CI/CD
 
 `.github/workflows/ci-cd.yml` define tres etapas: verificación con Maven, publicación de la imagen en Docker Hub y despliegue a Azure App Service. Se activa con cambios en `main` o `develop`.
 
-Secrets requeridos en GitHub: `DOCKERHUB_USERNAME`, `DOCKERHUB_TOKEN`, `AZURE_CREDENTIALS`, `AZURE_WEBAPP_NAME` y `JWT_SECRET`. El job de publicación/despliegue espera la variable de Actions `DEPLOY_ENABLED=true`; se mantiene apagado mientras faltan las credenciales. Configure además `MONGODB_URI`, `JWT_SECRET` y `WEBSITES_PORT=8080` en Azure App Service.
+Secrets requeridos en GitHub: `DOCKERHUB_USERNAME`, `DOCKERHUB_TOKEN`, `AZURE_CREDENTIALS`, `AZURE_WEBAPP_NAME` y `JWT_SECRET`. El job de publicación/despliegue requiere la variable de Actions `DEPLOY_ENABLED=true`. Configure además `MONGODB_URI`, `JWT_SECRET` y `WEBSITES_PORT=8080` en Azure App Service.
 
-**Estado del pipeline y despliegue:** el workflow está en el repositorio y la publicación/despliegue permanece desactivada hasta registrar los secrets de Docker Hub y Azure y la variable `DEPLOY_ENABLED=true`. El App Service ya existe; la imagen Spring Boot aún no está publicada.
+**Estado:** verificación, publicación de imagen y despliegue a Azure completados correctamente en el [run 38420076864](https://github.com/SantiagoAndresGarciaAlmario01/DOSW_ParcialT2_SantiagoGarcia/actions/runs/38420076864). Los valores de secrets y de `MONGODB_URI` no se incluyen en el README ni en capturas.
+
+![Evidencia de GitHub Actions con test, docker y deploy exitosos](docs/images/evidencia-actions.png)
 
 ## 11. Herramientas de modelado y diseño (evidencias)
 
-- **Herramienta de modelado** (Draw.io, Lucidchart o Miro): cuenta y captura pendientes.
-- **Figma:** cuenta y captura pendientes.
+- **Herramienta de modelado — Draw.io:** evidencia de la herramienta abierta: [evidencia-drawio.png](docs/images/evidencia-drawio.png).
 
-Guarde las evidencias propias en `docs/images/` y agregue aquí sus enlaces antes de entregar.
+![Evidencia de Draw.io](docs/images/evidencia-drawio.png)
+
+- **Figma:** evidencia de sesión y archivos recientes: [evidencia-figma.png](docs/images/evidencia-figma.png).
+
+![Evidencia de Figma](docs/images/evidencia-figma.png)
+
+Las capturas de Draw.io, Figma, Health, Maven, JaCoCo y GitHub Actions se incorporaron a `docs/images/`. No se reutilizaron imágenes del ZIP de referencia porque pertenecen a otra entrega.
